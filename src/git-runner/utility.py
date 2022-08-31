@@ -15,7 +15,19 @@ def local(*paths) -> str:
     )
 
 
-def getConfig() -> dict:
-    import json
-    with open(local('config.json')) as file:
-        return json.load(file)
+__config: dict = None  # noqa
+
+
+def getConfig(*keys):
+    global __config
+    if not __config:
+        import json
+        with open(local('config.json')) as file:
+            __config = json.load(file)
+
+    config = __config
+
+    for key in keys:
+        config = config[key]
+
+    return config
