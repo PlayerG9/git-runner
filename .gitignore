@@ -4,3 +4,7 @@
 # Datbases
 *.sl3
 *.sqlite
+
+# Log-Files
+*.log
+*.log.*
