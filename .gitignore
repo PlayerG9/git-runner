@@ -1,2 +1,6 @@
 # IDE specific
 .idea/
+
+# Datbases
+*.sl3
+*.sqlite
