@@ -3,4 +3,3 @@
 r"""
 
 """
-print("Hello World")
