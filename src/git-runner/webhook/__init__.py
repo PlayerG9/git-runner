@@ -5,6 +5,7 @@ r"""
 """
 import fastapi
 from pprint import pprint
+from . import github_updater # noqa (registers a schedule)
 
 
 webhook = fastapi.APIRouter()
