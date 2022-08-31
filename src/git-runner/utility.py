@@ -18,7 +18,7 @@ def local(*paths) -> str:
 __config: dict = None  # noqa
 
 
-def getConfig(*keys):
+def getConfig(*keys, default=...):
     global __config
     if not __config:
         import json
@@ -27,7 +27,13 @@ def getConfig(*keys):
 
     config = __config
 
-    for key in keys:
-        config = config[key]
+    try:
+        for key in keys:
+            config = config[key]
+    except (KeyError, IndexError) as error:
+        if default is ...:
+            raise error
+        else:
+            return default
 
     return config
