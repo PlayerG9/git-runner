@@ -20,7 +20,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "postbuild": "mv ./build ../git-runner/webinterface/website",
+    "postbuild": "cp -r -f build/* ../git-runner/webinterface/website/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
