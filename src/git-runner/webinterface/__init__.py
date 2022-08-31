@@ -26,7 +26,7 @@ async def getIndex():
 
 
 @website.get(
-    '/{path}',
+    '/{path:path}',
     include_in_schema=False
 )
 async def getFile(path: str = fastapi.Path()):
