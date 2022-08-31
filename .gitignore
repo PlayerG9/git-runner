@@ -1,5 +1,6 @@
 # IDE specific
 .idea/
+tmp/
 
 # Datbases
 *.sl3
