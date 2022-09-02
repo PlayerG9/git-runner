@@ -33,14 +33,22 @@ async def getIndex():
 async def getFile(path: str = fastapi.Path()):
     if os.path.splitext(path)[1]:
         return FileResponse(webResource('index.html'))  # support for front-end based routing (e.g. react-router)
-    return FileResponse(webResource(path))
+    filepath = webResource(path)
+    if os.path.isdir(filepath):
+        filepath = webResource(path, 'index.html')
+    if not os.path.isfile(filepath):
+        raise fastapi.HTTPException(
+            status_code=fastapi.status.HTTP_404_NOT_FOUND,
+            detail="file not found"
+        )
+    return FileResponse(filepath)
 
 
-def webResource(path: str):
+def webResource(*path: str):
     final = os.path.abspath(
         os.path.join(
             RESOURCE_PATH,
-            path
+            *path
         )
     )
     if os.path.commonpath([final, RESOURCE_PATH]) != RESOURCE_PATH:
