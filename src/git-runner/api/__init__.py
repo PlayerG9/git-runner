@@ -9,6 +9,10 @@ import fastapi
 api = fastapi.APIRouter(prefix='/api')
 
 
+from . import process_stats  # noqa
+from . import auth  # noqa
+
+
 @api.get('/test')
 async def test():
     return {"Hello": "World"}
