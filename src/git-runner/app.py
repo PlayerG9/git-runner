@@ -6,9 +6,12 @@ r"""
 import pyconfig  # noqa (configures python and libraries)
 import fastapi
 from fastapi.staticfiles import StaticFiles
-
 import utility
+import database
 from api import api as api_app
+
+
+database.initialiseDatabase()
 
 
 app = fastapi.FastAPI(
