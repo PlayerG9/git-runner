@@ -7,6 +7,7 @@ import fastapi
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 # from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
+from . import util
 
 __version__ = (0, 1, 0)
 __version_str__ = '.'.join(str(v) for v in __version__)
@@ -22,6 +23,23 @@ api.add_middleware(GZipMiddleware)
 
 from . import process  # noqa
 from . import auth  # noqa
+
+
+@api.exception_handler(Exception)
+async def exceptionHandler(request: fastapi.Request, exception: Exception):
+    if isinstance(exception, fastapi.HTTPException):
+        status = exception.status_code
+        detail = exception.detail
+    else:
+        status = 500
+        detail = str(exception)
+    message, description = util.status2info(exception.status_code)
+    return dict(
+        status=status,
+        message=message,
+        description=description,
+        detail=detail
+    )
 
 
 @api.get('/test')
