@@ -14,7 +14,7 @@ __version_str__ = '.'.join(str(v) for v in __version__)
 
 api = fastapi.FastAPI(
     title="Git-Runner",
-    version=__version_str__,
+    version=__version_str__
 )
 api.add_middleware(CORSMiddleware)
 # api.add_middleware(HTTPSRedirectMiddleware)
@@ -25,6 +25,7 @@ from . import process  # noqa
 from . import auth  # noqa
 
 
+@api.exception_handler(fastapi.HTTPException)
 @api.exception_handler(Exception)
 async def exceptionHandler(request: fastapi.Request, exception: Exception):
     if isinstance(exception, fastapi.HTTPException):
@@ -32,13 +33,17 @@ async def exceptionHandler(request: fastapi.Request, exception: Exception):
         detail = exception.detail
     else:
         status = 500
-        detail = str(exception)
-    message, description = util.status2info(exception.status_code)
-    return dict(
-        status=status,
-        message=message,
-        description=description,
-        detail=detail
+        detail = exception.args[0] if exception.args else None
+    message, description = util.status2info(status)
+    return fastapi.responses.JSONResponse(
+        status_code=status,
+        content=dict(
+            status=status,
+            type=exception.__class__.__name__,
+            message=message,
+            description=description,
+            detail=detail
+        )
     )
 
 
@@ -48,9 +53,16 @@ async def test():
 
 
 # "hidden" endpoint because why not
-@api.get('coffee', include_in_schema=False)
+@api.get('/coffee', include_in_schema=False)
 async def coffee():
     raise fastapi.HTTPException(
         status_code=fastapi.status.HTTP_418_IM_A_TEAPOT,
         detail="Server refuses to brew coffee because it is a teapot."
     )
+
+
+@api.get('/error/{code}', include_in_schema=False)
+async def simulateError(code: int, detail: str = fastapi.Query(None)):
+    if code not in range(200, 600):
+        raise ValueError('invalid status-code')
+    raise fastapi.HTTPException(status_code=code, detail=detail)
