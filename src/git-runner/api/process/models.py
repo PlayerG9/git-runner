@@ -39,3 +39,15 @@ class ProcessStatsResponse(pydantic.BaseModel):
     cpu: float
     memory: float
     threads: int
+
+
+class StartProcessResponse(pydantic.BaseModel):
+    pass
+
+
+class StopProcessResponse(pydantic.BaseModel):
+    pass
+
+
+class RestartProcessResponse(pydantic.BaseModel):
+    pass

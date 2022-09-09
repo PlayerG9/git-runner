@@ -20,7 +20,7 @@ api.add_middleware(CORSMiddleware)
 api.add_middleware(GZipMiddleware)
 
 
-from . import process_stats  # noqa
+from . import process  # noqa
 from . import auth  # noqa
 
 
