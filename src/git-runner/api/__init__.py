@@ -27,3 +27,12 @@ from . import auth  # noqa
 @api.get('/test')
 async def test():
     return {"Hello": "World"}
+
+
+# "hidden" endpoint because why not
+@api.get('coffee', include_in_schema=False)
+async def coffee():
+    raise fastapi.HTTPException(
+        status_code=fastapi.status.HTTP_418_IM_A_TEAPOT,
+        detail="Server refuses to brew coffee because it is a teapot."
+    )
