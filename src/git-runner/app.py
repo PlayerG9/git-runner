@@ -26,7 +26,7 @@ app.mount('/', StaticFiles(directory=utility.local('website'), html=True))
 
 
 @app.exception_handler(404)
-async def custom404handler(request: fastapi.Request, exception: Exception):
+async def custom404handler(request: fastapi.Request, _: Exception):
     file_handler: StaticFiles = request.scope.get('endpoint', None)
     if isinstance(file_handler, StaticFiles):
         # github-pages like 404.html option
