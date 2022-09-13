@@ -3,7 +3,6 @@
 r"""
 
 """
-import sqlalchemy
 import sqlalchemy.orm
 
 
@@ -17,5 +16,9 @@ def initDatabase():
     BaseModel.metadata.create_all(bind=engine)
 
 
-def createSession():
-    return sqlalchemy.orm.sessionmaker(bind=engine)
+class _MetaSession(sqlalchemy.orm.Session):
+    def __enter__(self) -> sqlalchemy.orm.Session: ...
+
+
+def createSession() -> _MetaSession:
+    return _MetaSession(bind=engine)
